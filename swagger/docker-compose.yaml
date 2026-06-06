@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  swaggerui:
+    image: swaggerapi/swagger-ui
+    container_name: swaggerui
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    environment:
+      - SWAGGER_JSON=/foo/api.json
+    volumes:
+      - ./data/api.json:/foo/api.json
+    networks:
+      - swaggerui
+    ports:
+      - "8083:8080"
+
+networks:
+  swaggerui:
+    driver: bridge
