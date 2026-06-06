@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:6
+    container_name: redis-server
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    volumes:
+      - ./data:/data
+      - ./redis.conf:/redis.conf
+    networks:
+      - redis
+    ports:
+      - "6379:6379"
+    command: redis-server /redis.conf
+
+networks:
+  redis:
+    driver: bridge
