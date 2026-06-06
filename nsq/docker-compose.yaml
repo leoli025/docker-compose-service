@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+  # NSQ 的服务发现组件，负责跟踪活跃的 nsqd 节点并提供主题和通道的发现服务
+  nsqlookupd:
+    container_name: "nsqlookupd"
+    image: nsqio/nsq:v1.3.0
+    command: /nsqlookupd -http-address 0.0.0.0:4161 -tcp-address 0.0.0.0:4160 -broadcast-address=nsqlookupd
+    networks:
+      - nsq-network
+    hostname: nsqlookupd
+    ports:
+      - "4161:4161"
+      - "4160:4160"
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+  # NSQ 的核心消息队列节点，负责接收、存储和转发消息
+  nsqd1:
+    container_name: "nsqd1"
+    image: nsqio/nsq:v1.3.0
+    command: /nsqd -tcp-address 0.0.0.0:4150 -http-address 0.0.0.0:4151 -broadcast-address=nsqd1 -lookupd-tcp-address=nsqlookupd:4160 -max-req-timeout=24h0m0s
+    depends_on:
+      - nsqlookupd
+    hostname: nsqd1
+    networks:
+      - nsq-network
+    ports:
+      - "4151:4151"
+      - "4150:4150"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+  # NSQ 的 Web 管理界面，用于可视化监控和管理 NSQ 集群（如查看主题、通道、消息统计等）
+  nsqadmin:
+    container_name: "nsqadmin"
+    image: nsqio/nsq:v1.3.0
+    command: /nsqadmin -lookupd-http-address=nsqlookupd:4161
+    depends_on:
+      - nsqlookupd
+    hostname: nsqadmin
+    networks:
+      - nsq-network
+    ports:
+      - "4171:4171"
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  nsq-network:
+    driver: bridge
+
+

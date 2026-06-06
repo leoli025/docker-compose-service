@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  asynqmon:
+    image: hibiken/asynqmon:latest
+    container_name: asynqmon
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: 200M
+        reservations:
+          memory: 200M
+    networks:
+      - asynqmon
+    ports:
+      - "8088:8080"
+    command: "./asynqmon --redis-addr=host.docker.internal:6379"
+    environment:
+      - REDIS_ADDR=host.docker.internal:6379
+      # - REDIS_PASSWORD=
+      # - REDIS_DB=0
+      # - REDIS_MAX_RETRIES=3
+
+networks:
+  asynqmon:
+    driver: bridge
+
