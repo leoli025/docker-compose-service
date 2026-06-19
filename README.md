@@ -12,8 +12,9 @@
 | nsqadmin   | 4171           | 4171           | http://localhost:4171  |
 | portainer  | 9000           | 9000           | http://localhost:9000  |
 | redis      | 6379           | 6379           | -                      |
-| swagger    | 8083           | 8080           | http://localhost:8080  |
+| swagger    | 8083           | 8080           | http://localhost:8083  |
 | rabbitmq   | 5672<br/>15672 | 5672<br/>15672 | http://localhost:15672 |
+| kafka      | 9092<br/>8081  | 9092<br/>8080  | http://lcoalhost:8081  |
 
 ## docker-compose 基础命令
 

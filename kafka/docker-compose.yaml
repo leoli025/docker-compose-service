@@ -1,0 +1,65 @@
+services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    restart: unless-stopped
+    networks:
+      - kafka-net
+    ports:
+      - "9092:9092"
+    environment:
+      # --- KRaft 模式核心配置 ---
+      # 节点ID，单节点设置为1
+      KAFKA_NODE_ID: 1
+      # 进程角色，同时作为 broker 和 controller
+      KAFKA_PROCESS_ROLES: broker,controller
+      # 集群唯一ID，可使用命令生成: uuidgen | tr -d '-'
+      KAFKA_CLUSTER_ID: "F9C21923AB7A44F787C1B19EBA42328F"
+
+      # --- 监听器配置 ---
+      # 定义 Kafka 内部使用的监听器
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      # 定义对外公布的监听器地址，客户端通过此地址连接
+      # 若需外部访问，请将 localhost 替换为宿主机IP
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      # 定义 Controller 监听器
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      # 定义 Controller 的投票者
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      # 定义 Broker 间通信的监听器
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+      # --- 存储与主题配置 ---
+      # Kafka 数据存储目录
+      KAFKA_LOG_DIRS: /kafka/data
+      # 单节点模式下，以下复制因子均设为 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    volumes:
+      - "./data:/kafka/data"
+    # 健康检查：通过 kafka-broker-api-versions 命令验证服务是否就绪
+#    healthcheck:
+#      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions", "--bootstrap-server=localhost:9092"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: unless-stopped
+    networks:
+      - kafka-net
+    ports:
+      - "8081:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+      KAFKA_CLUSTERS_0_METRICS_PORT: 9092
+    depends_on:
+      - kafka
+
+networks:
+  kafka-net:
+    driver: bridge
