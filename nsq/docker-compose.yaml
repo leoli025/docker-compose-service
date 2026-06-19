@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   # NSQ 的服务发现组件，负责跟踪活跃的 nsqd 节点并提供主题和通道的发现服务
   nsqlookupd:

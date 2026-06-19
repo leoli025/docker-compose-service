@@ -12,9 +12,3 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - TZ=Asia/Shanghai
-    networks:
-      - jenkins_net
-
-networks:
-  jenkins_net:
-    driver: bridge

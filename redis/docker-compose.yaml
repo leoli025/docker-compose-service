@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   redis:
     image: redis:6
@@ -13,12 +11,6 @@ services:
     volumes:
       - ./data:/data
       - ./redis.conf:/redis.conf
-    networks:
-      - redis
     ports:
       - "6379:6379"
     command: redis-server /redis.conf
-
-networks:
-  redis:
-    driver: bridge

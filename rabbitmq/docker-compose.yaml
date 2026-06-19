@@ -3,6 +3,12 @@ services:
     build:
       context: .
     container_name: rabbitmq
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     ports:
       - "5672:5672"    # 通信端口
       - "15672:15672"  # 管理界面端口

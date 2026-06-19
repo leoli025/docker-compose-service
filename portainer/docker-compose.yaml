@@ -3,6 +3,11 @@ services:
     image: portainer/portainer-ce:latest
     container_name: portainer
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
     ports:
       - "9000:9000"
     volumes:
@@ -10,9 +15,3 @@ services:
       - ./data:/data
     environment:
       - TZ=Asia/Shanghai
-    networks:
-      - portainer_net
-
-networks:
-  portainer_net:
-    driver: bridge

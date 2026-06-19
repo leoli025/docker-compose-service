@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   asynqmon:
     image: hibiken/asynqmon:latest
@@ -17,8 +15,6 @@ services:
           memory: 200M
         reservations:
           memory: 200M
-    networks:
-      - asynqmon
     ports:
       - "8088:8080"
     command: "./asynqmon --redis-addr=host.docker.internal:6379"
@@ -27,8 +23,3 @@ services:
       # - REDIS_PASSWORD=
       # - REDIS_DB=0
       # - REDIS_MAX_RETRIES=3
-
-networks:
-  asynqmon:
-    driver: bridge
-

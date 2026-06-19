@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   swaggerui:
     image: swaggerapi/swagger-ui
@@ -14,11 +12,5 @@ services:
       - SWAGGER_JSON=/foo/api.json
     volumes:
       - ./data/api.json:/foo/api.json
-    networks:
-      - swaggerui
     ports:
       - "8083:8080"
-
-networks:
-  swaggerui:
-    driver: bridge
