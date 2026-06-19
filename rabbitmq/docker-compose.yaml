@@ -1,0 +1,15 @@
+services:
+  rabbitmq:
+    build:
+      context: .
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    # 通信端口
+      - "15672:15672"  # 管理界面端口
+    environment:
+      - TZ=Asia/Shanghai
+      - RABBITMQ_DEFAULT_USER=admin      # 设置默认用户名
+      - RABBITMQ_DEFAULT_PASS=admin123   # 设置默认密码
+    volumes:
+      - ./data:/var/lib/rabbitmq
+      - ./log:/var/log/rabbitmq

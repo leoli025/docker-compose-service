@@ -7,15 +7,9 @@ services:
       driver: 'json-file'
       options:
         max-size: '50m'
-    networks:
-      - nginx_net
     ports:
-      - 8090:80
+      - "8090:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./conf.d:/etc/nginx/conf.d
       - ./html:/usr/share/nginx/html
-
-networks:
-  nginx_net:
-    driver: bridge
