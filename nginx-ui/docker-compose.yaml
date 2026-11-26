@@ -1,0 +1,25 @@
+services:
+  nginx-ui:
+    # 官方镜像自带 nginx,不需要单独的 nginx 容器
+    image: uozi/nginx-ui:latest
+    container_name: nginx-ui
+    restart: unless-stopped
+
+    ports:
+      # UI 直连入口(容器内默认 9000)
+      - "9000:9000"
+      # 镜像内置 nginx 的 HTTP 端口;80 会被反代到 UI(镜像自带 conf.d/nginx-ui.conf)
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      # 整个 nginx 配置目录(conf.d、sites-available/enabled、streams、nginx.conf)
+      # 首次启动时此目录必须为空,镜像会自动播种完整默认配置;
+      # 此后在 UI 里改的配置都会持久化到这里
+      - ./nginx:/etc/nginx
+      # UI 数据(app.ini、database.db、JwtSecret、插件),重建容器不丢失
+      - ./data:/etc/nginx-ui
+      # 静态站点根目录,站点配置里 root 指向 /var/www 即可
+      - ./www:/var/www
+      # 可选:挂载 Docker socket 才能在 UI 里管理容器、查看 Docker 信息
+      - /var/run/docker.sock:/var/run/docker.sock:ro

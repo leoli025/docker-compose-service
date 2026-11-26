@@ -7,6 +7,7 @@
 | jenkins    | 8080                     | 8080                     | http://localhost:8080  |
 | mysql      | 3306                     | 3306                     | -                      |
 | nginx      | 8090                     | 80                       | http://localhost:8090  |
+| nginx-ui   | 9000<br/>80<br/>443      | 9000<br/>80<br/>443      | http://localhost:9000  |
 | nsqlookupd | 4160<br/>4161            | 4160<br/>4161            | -                      |
 | nsq1       | 4150<br/>4151            | 4150<br/>4151            | -                      |
 | nsqadmin   | 4171                     | 4171                     | http://localhost:4171  |

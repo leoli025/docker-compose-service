@@ -2,3 +2,4 @@
 test
 ### Docker Compose Data Directories **/
 **/data/
+**/logs/
