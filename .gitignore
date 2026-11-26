@@ -3,3 +3,5 @@ test
 ### Docker Compose Data Directories **/
 **/data/
 **/logs/
+### ShardingSphere Proxy JDBC Driver ###
+shardingsphere-proxy/ext-lib/*.jar

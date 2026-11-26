@@ -14,6 +14,7 @@
 | portainer  | 9000                     | 9000                     | http://localhost:9000  |
 | redis      | 6379                     | 6379                     | -                      |
 | swagger    | 8083                     | 8080                     | http://localhost:8083  |
+| shardingsphere-proxy | 3307            | 3307                     | -                      |
 | rabbitmq   | 5672<br/>15672           | 5672<br/>15672           | http://localhost:15672 |
 | kafka      | 9092<br/>8081            | 9092<br/>8080            | http://lcoalhost:8081  |
 | jaeger     | 16686<br/>4317<br/>4318  | 16686<br/>4317<br/>4318  | http://lcoalhost:16686 |
@@ -39,3 +40,8 @@ docker-compose logs
 # 查看启动的服务
 docker-compose ps  
 ```
+
+> shardingsphere-proxy 首次使用:
+> 1. 执行 `docker exec -i mysql-server mysql -uroot -proot < shardingsphere-proxy/sql/init.sql` 创建分片库和物理表
+> 2. 将 MySQL JDBC 驱动放入 `shardingsphere-proxy/ext-lib/`(镜像不自带),见 compose 注释中的下载地址
+> 3. 代理连接:`mysql -h127.0.0.1 -P3307 -uroot -proot`,逻辑库 `sharding_db`,逻辑表 `t_order`

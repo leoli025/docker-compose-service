@@ -1,0 +1,30 @@
+services:
+  shardingsphere-proxy:
+    image: apache/shardingsphere-proxy:5.5.3
+    container_name: shardingsphere-proxy
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      # server.yaml / config-sharding.yaml / logback.xml 等代理配置
+      - ./conf:/opt/shardingsphere-proxy/conf
+      # 镜像不自带 MySQL JDBC 驱动,需放入 ext-lib
+      # 驱动下载: https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.4.0/mysql-connector-j-8.4.0.jar
+      - ./ext-lib:/opt/shardingsphere-proxy/ext-lib
+      - ./logs:/opt/shardingsphere-proxy/logs
+    ports:
+      # 客户端连接代理的端口(MySQL 协议)
+      - "3307:3307"
+    networks:
+      - mysql
+
+networks:
+  # 加入已有 mysql 服务所在网络,可直接用 mysql-server 作为数据源地址
+  mysql:
+    name: mysql_mysql
+    external: true

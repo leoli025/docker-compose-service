@@ -1,0 +1,10 @@
+authority:
+  users:
+    # 连接代理时使用的账号(与真实 MySQL 账号无关)
+    - user: root
+      password: root
+  privilege:
+    type: ALL_PERMITTED
+
+props:
+  system-log-level: INFO
